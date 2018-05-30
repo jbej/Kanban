@@ -33,39 +33,34 @@ export function getLanes(req, res) {
   });
 }
 
-export function deleteNote(req, res) {
-  const noteId = req.params.noteId;
-  Note.findOne({ id: noteId }).exec((err, note) => {
-    if (err) {
+export function deleteLane(req, res) {
+  Lane.findOne({ id: req.params.laneId }).exec((err, lane) => {
+    if(err){
       res.status(500).send(err);
     }
 
-    Lane.findOne({id: req.body.laneId}).exec((err, lane) => {
-      const updatedNotes = lane.notes.filter(note => note.id !== noteId);
-        lane.notes = updatedNotes;
-        lane.save(()=> {
-          note.remove(() => {
-            res.status(200).end();
-          });
+    const notes = lane.notes;
+    const notesIds = notes.map(note => note.id);
+    Note.remove({id: {$in: notesIds}}).exec(err => {
+      lane.remove(() => {
+        res.status(200).end();
         });
       });
-    });
+  });
 }
 
-export function editNote (req, res){
-  const noteId = req.params.noteId;
-  const newTask = req.body.task;
-  Note.findOne({id: noteId}).exec((err, note) => {
+ export function editName(req, res) {
+  Lane.findOne({id: req.params.laneId }).exec((err, lane) => {
     if (err) {
       res.status(500).send(err);
     }
-    note.task = newTask;
-    note.save((err, noteSaved) => {
+    const newlaneName = req.body.name;
+    lane.name = newlaneName;
+    lane.save( (err, laneSaved) => {
       if (err) {
-        res.status(500).end();
+        res.status(500).send();
       }
-
-      res.json(noteSaved);
-    })
+      res.json(laneSaved);
+    });
   });
 }

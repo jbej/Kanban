@@ -52,22 +52,21 @@ export function editNote(req, res) {
   });
 }
 
-export function deleteNoteFromeLane(req, res) {
-  Note.findOne({id: req.params.noteId}).exec((err, note) => {
+export function deleteNote(req, res) {
+  const noteId = req.params.noteId;
+  Note.findOne({ id: noteId }).exec((err, note) => {
     if (err) {
       res.status(500).send(err);
     }
-    if (note) {
-      Lane.findOne({notes: note._id}).exec((err, lane) => {
-        if (err) {
-          res.status(500).send(err);
-        }
-        lane.notes.pull(note);
-        lane.save();
+
+    Lane.findOne({id: req.body.laneId}).exec((err, lane) => {
+      const updatedNotes = lane.notes.filter(note => note.id !== noteId);
+        lane.notes = updatedNotes;
+        lane.save(()=> {
+          note.remove(() => {
+            res.status(200).end();
+          });
+        });
+      });
     });
-    res.status(200).send(note);
-    } else {
-      res.status(500).send("Mistake!");
-    }
-  });
 }
