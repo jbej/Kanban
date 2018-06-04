@@ -3,11 +3,11 @@ import Notes from './Notes';
 import { deleteNoteRequest, editNote, updateNoteRequest, moveWithinLane } from '../Note/NoteActions';
 
 const mapDispatchToProps = {
-  editNote,
-  updateNote: updateNoteRequest,
-  deleteNote: deleteNoteRequest,
+  onValueClick: editNote,
+  onUpdate: updateNoteRequest,
+  onDelete: deleteNoteRequest,
   moveWithinLane,
-}
+};
 
 export default connect(
   null,

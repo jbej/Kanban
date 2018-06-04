@@ -1,6 +1,5 @@
 import callApi from '../../util/apiCaller';
 import { lanes } from '../../util/schema';
-//import { lanes } from '../../../server/util/schema';
 import { normalize } from 'normalizr';
 import { createNotes } from '../Note/NoteActions';
 
