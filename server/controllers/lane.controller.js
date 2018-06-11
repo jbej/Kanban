@@ -42,9 +42,7 @@ export function deleteLane(req, res) {
     const notes = lane.notes;
     const notesIds = notes.map(note => note.id);
     Note.remove({id: {$in: notesIds}}).exec(err => {
-      lane.remove(() => {
-        res.status(200).end();
-        });
+      lane.remove(res.status(200).end);
       });
   });
 }
