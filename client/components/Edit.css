@@ -1,0 +1,12 @@
+.delete {
+    padding: 5px;
+}
+
+.value {
+    font-weight: bold;
+}
+
+.value:hover {
+    cursor: pointer;
+    color: blue;
+}
